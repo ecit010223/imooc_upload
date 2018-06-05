@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import com.year18.imooc_upload.http.Way2.Binary;
 import com.year18.imooc_upload.util.CounterOutputStream;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
@@ -104,7 +103,8 @@ public abstract class Request<T> {
     protected boolean hasFile(){
         for (KeyValue keyValue : mKeyValues) {
             Object value = keyValue.getValue();
-            if(value instanceof File){
+//            if(value instanceof File){
+            if(value instanceof Binary){  // 修改为way2方式
                 return true;
             }
         }

@@ -1,8 +1,8 @@
 package com.year18.imooc_upload;
 
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 
 import com.alibaba.fastjson.JSON;
@@ -13,6 +13,7 @@ import com.year18.imooc_upload.http.RequestExecutor;
 import com.year18.imooc_upload.http.RequestMethod;
 import com.year18.imooc_upload.http.Response;
 import com.year18.imooc_upload.http.Way2.FileBinary;
+import com.year18.imooc_upload.http.Way2.InputStreamBinary;
 import com.year18.imooc_upload.http.error.ParseError;
 import com.year18.imooc_upload.http.error.TimeoutError;
 import com.year18.imooc_upload.http.error.URLError;
@@ -24,6 +25,8 @@ import com.year18.imooc_upload.util.ThreadUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -96,7 +99,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         request.add("username","hoho");
 //        request.add("image",file1);
         //用way2方式实现
-        request.add("image",new FileBinary(file1));
+        request.add("image1",new FileBinary(file1));
+        try {
+            request.add("image2",new InputStreamBinary("abc.jpg","image/jpeg",new FileInputStream(file2)));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         RequestExecutor.INSTANCE.execute(request, new HttpListener<String>() {
             @Override
             public void onSuccessed(Response<String> response) {

@@ -14,6 +14,7 @@ import com.year18.imooc_upload.http.RequestMethod;
 import com.year18.imooc_upload.http.Response;
 import com.year18.imooc_upload.http.Way2.FileBinary;
 import com.year18.imooc_upload.http.Way2.InputStreamBinary;
+import com.year18.imooc_upload.http.Way2.OnBinaryProgressListener;
 import com.year18.imooc_upload.http.error.ParseError;
 import com.year18.imooc_upload.http.error.TimeoutError;
 import com.year18.imooc_upload.http.error.URLError;
@@ -99,9 +100,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         request.add("username","hoho");
 //        request.add("image",file1);
         //用way2方式实现
-        request.add("image1",new FileBinary(file1));
+        FileBinary fileBinary1 = new FileBinary(file1);
+        fileBinary1.setProgressListener(1, mProgressListener);
+        request.add("image1",fileBinary1);
+
+        FileBinary fileBinary2 = new FileBinary(file1);
+        fileBinary2.setProgressListener(2,mProgressListener);
+        request.add("image2",fileBinary2);
         try {
-            request.add("image2",new InputStreamBinary("abc.jpg","image/jpeg",new FileInputStream(file2)));
+            request.add("image3",new InputStreamBinary("abc.jpg","image/jpeg",new FileInputStream(file2)));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -138,6 +145,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //            }
         });
     }
+
+    private OnBinaryProgressListener mProgressListener = new OnBinaryProgressListener() {
+        @Override
+        public void onProgress(int what, int progress) {
+            switch (what){
+                case 1:
+                    break;
+                case 2:
+                    break;
+            }
+        }
+
+        @Override
+        public void onError(int what) {
+
+        }
+    };
 
     /**
      * get请求
